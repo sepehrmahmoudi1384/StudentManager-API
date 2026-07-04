@@ -12,5 +12,6 @@ app.MigrateDb();
 
 // Adding endpoints
 app.MapStudentEndPoints();
+app.MapGradeEndpoints();
 
 app.Run();

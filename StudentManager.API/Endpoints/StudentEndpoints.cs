@@ -7,15 +7,15 @@ namespace StudentManager.API.Endpoints;
 
 public static class StudentEndpoints
 {
-    const string GetStudentByIdEndpoint = "GetStudent";
+    const string GetStudentEndpointName = "GetStudent";
     public static void MapStudentEndPoints(
         this WebApplication app
     )
     {
-        var group = app.MapGroup("/students");
+        var studentGroup = app.MapGroup("/students");
 
         // GET /students
-        group.MapGet("/", async (StudentManagerDbContext dbContext) =>
+        studentGroup.MapGet("/", async (StudentManagerDbContext dbContext) =>
         {
             var students = await dbContext.Set<Student>()
                 .Include(student => student.Grade)
@@ -32,7 +32,7 @@ public static class StudentEndpoints
         });
 
         // GET /students/1
-        group.MapGet(
+        studentGroup.MapGet(
             "/{id}",
             async (int id, StudentManagerDbContext dbContext) =>
             {
@@ -43,10 +43,10 @@ public static class StudentEndpoints
                     ? Results.NotFound()
                     : Results.Ok(new GetStudentDTO(student.Id, student.Name, student.Age, student.GradeId));
             }
-        ).WithName(GetStudentByIdEndpoint);
+        ).WithName(GetStudentEndpointName);
 
         // POST /students
-        group.MapPost(
+        studentGroup.MapPost(
             "/",
             async (
                 CreateStudentDTO newStudent,
@@ -73,11 +73,11 @@ public static class StudentEndpoints
             );
 
             return Results
-                .CreatedAtRoute(GetStudentByIdEndpoint, new { id = studentDto.Id }, studentDto);
+                .CreatedAtRoute(GetStudentEndpointName, new { id = studentDto.Id }, studentDto);
         });
 
         // PUT /students/1
-        group.MapPut(
+        studentGroup.MapPut(
             "/{id}",
             async (
                 int id,
@@ -100,7 +100,7 @@ public static class StudentEndpoints
         );
 
         // DELETE /students/1
-        group.MapDelete(
+        studentGroup.MapDelete(
             "/{id}",
             async (int id, StudentManagerDbContext dbContext) =>
             {

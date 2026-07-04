@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 *.swp
 
 **/.vscode/
+
+**/*.db
+
+**/.db*
